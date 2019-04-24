@@ -1,25 +1,32 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {Router, Route, Switch} from 'react-router-dom';
+import SearchBar from './components/SearchBar';
+import ProductList from './components/ProductList';
+import ProductDetail from './components/ProductDetail';
+import history from './history';
+import './App.scss';
 
 class App extends Component {
+  onTermSubmit = (term) => {
+    history.push({
+        pathname: '/items',
+        search: `?search=${term}`
+    });
+  }
+  
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div className="app vh-100">
+          <Router history={history}>
+              <div className="content">
+                  <SearchBar onFormSubmit={this.onTermSubmit} />
+                  <Switch>
+                      <Route path="/" exact component={ProductList}></Route>
+                      <Route path="/items" exact component={ProductList}></Route>
+                      <Route path="/items/:id" component={ProductDetail}></Route>
+                  </Switch>
+              </div>
+          </Router>
       </div>
     );
   }
